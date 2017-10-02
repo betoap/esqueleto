@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+"use strict";
+const config = require('./.config');
+var db;
+
+if( config.ambiente == 'developement' ) {
+    db = {
+        tipo : "mysql",
+        usuario : "root",
+        senha : "betoap",
+        servidor : "localhost",
+        porta : 3306,
+        dbnome : "fam"
+    }
+}
+
+if( config.ambiente == 'test' ) {
+    db = {
+        tipo : "mysql",
+        usuario : "root",
+        senha : "betoap",
+        servidor : "localhost",
+        porta : 3306,
+        dbnome : "fam"
+    }
+}
+
+if( config.ambiente == 'production' ) {
+    db = {
+        tipo : "mysql",
+        usuario : "root",
+        senha : "betoap",
+        servidor : "localhost",
+        porta : 3306,
+        dbnome : "fam"
+    }
+}
+
+module.exports = db;

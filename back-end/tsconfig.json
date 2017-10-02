@@ -1,0 +1,25 @@
+{
+    "compileOnSave": true,
+    "buildOnSave": true,
+    "noImplicitAny": true,
+    "compilerOptions" : {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "build",
+        "watch": true,
+        "typeRoots": [
+            "../node_modules/@types"
+        ],
+        "types":[
+            "node"
+        ]
+    },
+    "include":[
+        "servidor/**/*.ts",
+        "servidor/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
