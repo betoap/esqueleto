@@ -1,1 +1,1 @@
-# esquelo
+# esqueleto
