@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//import * as validacao from "validate.js";
+//import validate from "validate.js";
 const validacao = require("validate.js");
 class Filtro {
     constructor() {
@@ -8,6 +8,7 @@ class Filtro {
     }
     contemErros(object) {
         return validacao(object, this.restrincoes);
+        //return validate(object, this.restrincoes);
     }
 }
 exports.Filtro = Filtro;

@@ -7,9 +7,13 @@ class UsuarioRota extends rota_1.Rota {
         super();
         this.controle = new usuario_controle_1.UsuarioControle();
         this.router.get('/about', this.about);
+        this.router.post("/login", this.login);
     }
     about(req, res, next) {
         res.send('About - Usuario');
+    }
+    login(req, res, next) {
+        res.status(200).json(res["token"]);
     }
 }
 module.exports = new UsuarioRota().rotas();

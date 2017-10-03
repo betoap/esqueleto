@@ -8,8 +8,14 @@ class Repositorio {
         this.db = new conexao_1.Conexao();
         const tabela = this.entidade.tabela;
         delete this.entidade.tabela;
-        this.conexao = this.db.conexao.define(tabela, this.entidade);
+        this.conexao = this.db.conexao.define(tabela, this.entidade, this.sequelizeConfig());
         this.sequelize = this.db.sequelize;
+    }
+    sequelizeConfig() {
+        return {
+            createdAt: 'criado_em',
+            updatedAt: 'editado_em',
+        };
     }
     find() {
         return this.conexao.find({});
@@ -23,10 +29,7 @@ class Repositorio {
         });
     }
     getAll() {
-        return this.conexao.findAll({
-            offset: 1,
-            limit: 2
-        });
+        return this.conexao.findAll({});
     }
     count() {
         return this.conexao.count();

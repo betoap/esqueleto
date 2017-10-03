@@ -8,12 +8,17 @@ export class UsuarioFiltro extends Filtro
     {
         super();
         this.restrincoes.nome = {
-            presence: true
+            presence: true,
+            length: {
+                minimum: 6,
+                message: "deve ter pelo menos 6 caracteres"
+            }
         };
         this.restrincoes.email = {
           presence: true,
-          email: true,
-          message: "^You need to be atleast 18 years old"
+          email: {
+            message: "^email invalido"
+          }
       };
     }
 }

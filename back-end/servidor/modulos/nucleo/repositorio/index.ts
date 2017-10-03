@@ -20,8 +20,16 @@ export abstract class Repositorio
         this.db = new Conexao();
         const tabela:string = this.entidade.tabela;
         delete this.entidade.tabela;
-        this.conexao = this.db.conexao.define(tabela, this.entidade);
+        this.conexao = this.db.conexao.define( tabela, this.entidade, this.sequelizeConfig() );
         this.sequelize = this.db.sequelize;
+    }
+
+    private sequelizeConfig()
+    {
+        return {
+            createdAt: 'criado_em',
+            updatedAt: 'editado_em',
+          }
     }
 
     public find()
@@ -40,8 +48,8 @@ export abstract class Repositorio
     public getAll()
     {
         return this.conexao.findAll({
-            offset: 1,
-            limit: 2
+            //offset: 1,
+            //limit: 2
         });
     }
 
