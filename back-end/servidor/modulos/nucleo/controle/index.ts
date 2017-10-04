@@ -1,40 +1,40 @@
 import { Request } from "express";
 export abstract class Controle
 {
-    protected repositorio: any;
+    protected servico: any;
 
     get()
     {
         return this
-        .repositorio
+        .servico
         .get()
     }
 
     getAll()
     {
         return this
-        .repositorio
+        .servico
         .getAll()
     }
 
     post(req: Request)
     {
         return this
-        .repositorio
+        .servico
         .create(req.body);
     }
 
     put(req: Request)
     {
         return this
-        .repositorio
+        .servico
         .update(req.params.id, req.body)
     }
 
     delete(req: Request)
     {
         return this
-        .repositorio
+        .servico
         .delete(req.params.id)
     }
 }

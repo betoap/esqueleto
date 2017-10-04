@@ -1,4 +1,3 @@
-//import validate from "validate.js";
 const validacao = require("validate.js");
 
 export abstract class Filtro
@@ -13,6 +12,5 @@ export abstract class Filtro
     public contemErros(object: any): any
     {
         return validacao(object, this.restrincoes);
-        //return validate(object, this.restrincoes);
     }
 }

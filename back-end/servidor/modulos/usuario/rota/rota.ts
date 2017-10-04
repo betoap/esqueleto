@@ -1,5 +1,7 @@
 import { Request, Response, ErrorRequestHandler, Router, RouterOptions } from "express";
+import * as HttpStatus from "http-status";
 
+import { Proxy } from "./../../nucleo/uteis";
 import { Rota } from "./../../nucleo/rota";
 import { UsuarioControle } from "./../controle/usuario-controle";
 
@@ -11,18 +13,22 @@ class UsuarioRota extends Rota
     {
         super();
         this.controle  = new UsuarioControle();
-        this.router.get('/about', this.about);
-        this.router.post("/login", this.login);
+        this.router.get( "/about", Proxy.create( this, this.about ) );
+        this.router.post( "/login", Proxy.create( this, this.login ) );
     }
 
     protected about( req: Request, res: Response, next:Function ): void
     {
-        res.send('About - Usuario');
+        res.send( "About - Usuario" );
     }
     
     protected login( req: Request, res: Response, next:Function ): void
     {
-        res.status(200).json( res["token"] );
+        let login = this
+            .controle
+            .login( req, res )
+            .then( entidade => this.resposta( res, HttpStatus.CREATED, entidade ) ) 
+            .catch( erro => this.resposta( res, HttpStatus.NOT_ACCEPTABLE, erro ) );
     }
 }
 

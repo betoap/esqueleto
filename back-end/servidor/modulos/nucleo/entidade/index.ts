@@ -4,6 +4,9 @@ export abstract class Entidade
 {
     protected tabela:  string;
 
+    public getHooks(){ return {} }
+    public getClassMethods(){ return {} }
+
     //Campos padrões do sequelize ( createdAt / updatedAt )
     public criado_em = {
         type: Sequelize.DATE,

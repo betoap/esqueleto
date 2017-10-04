@@ -3,27 +3,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class Controle {
     get() {
         return this
-            .repositorio
+            .servico
             .get();
     }
     getAll() {
         return this
-            .repositorio
+            .servico
             .getAll();
     }
     post(req) {
         return this
-            .repositorio
+            .servico
             .create(req.body);
     }
     put(req) {
         return this
-            .repositorio
+            .servico
             .update(req.params.id, req.body);
     }
     delete(req) {
         return this
-            .repositorio
+            .servico
             .delete(req.params.id);
     }
 }

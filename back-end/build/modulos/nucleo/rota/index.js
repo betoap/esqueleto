@@ -51,8 +51,8 @@ class Rota {
             .catch(erro => this.resposta(res, HttpStatus.UNPROCESSABLE_ENTITY, erro));
     }
     resposta(res, status, dados) {
-        dados.token = res["token"];
-        dados.expire = res["expires"];
+        if (status >= 200 && status < 300)
+            dados.token = res["token"];
         return res.status(status).json(dados);
     }
 }

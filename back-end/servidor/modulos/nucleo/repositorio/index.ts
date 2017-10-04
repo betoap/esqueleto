@@ -1,4 +1,4 @@
-import {Promise} from 'es6-promise';
+import { Promise } from 'es6-promise';
 
 import { Conexao } from "./../../../infra/conexao";
 import { Entidade } from "./../entidade";
@@ -9,7 +9,6 @@ export abstract class Repositorio
 
     protected entidade: any;
     protected filtro: any;
-
     protected conexao: any;
     protected sequelize: any;
     protected repositorio: any;
@@ -27,6 +26,8 @@ export abstract class Repositorio
     private sequelizeConfig()
     {
         return {
+            hooks: this.entidade.getHooks(),
+            classMethods: this.entidade.getClassMethods(),
             createdAt: 'criado_em',
             updatedAt: 'editado_em',
           }
@@ -36,35 +37,33 @@ export abstract class Repositorio
     {
         return this.conexao.find({});
     }
-    public findBy(id:number)
+
+    public findBy( objeto: object )
     {
-        return this.conexao.findById(id)
-    }
-    public findOne(){
-        return this.conexao.findAll({
-            limit: 1
-        })
-    }
-    public getAll()
-    {
-        return this.conexao.findAll({
-            //offset: 1,
-            //limit: 2
-        });
+        return this.conexao.findBy( objeto )
     }
 
-    public count(){
-        return this.conexao.count();
+    public findOne( objeto: object ){
+        return this.conexao.findOne( objeto );
     }
 
-    public salvar(entidade: Entidade, updateID: number = null)
+    public getAll( objeto: object )
+    {
+        return this.conexao.findAll( objeto );
+    }
+
+    public count( objeto: object ){
+        return this.conexao.count( objeto );
+    }
+
+    public salvar(entidade: Entidade,  objeto?: object )
     {
         let erros = this.filtro.contemErros( entidade );
         if ( !erros ) {
-            if ( updateID ) {
-                return this.conexao.findByIdAndUpdate(updateID, entidade);
+            if ( objeto ) {
+                return this.conexao.findByAndUpdate( objeto, entidade );
             } else {
-                return this.conexao.create(entidade);
+                return this.conexao.create( entidade );
             }
         } else {
             return new Promise ( ( resolve, reject ) => {
@@ -78,13 +77,13 @@ export abstract class Repositorio
         return this.salvar(entidade);
     }
 
-    public update(id:number, entidade:Entidade)
+    public update( entidade:Entidade, objeto: object )
     {
-        return this.salvar(entidade, id);
+        return this.salvar(entidade, objeto);
     }
 
-    public delete(id:number)
+    public delete( objeto: object )
     {
-        return this.conexao.delete(id);
+        return this.conexao.delete( objeto );
     }
 }

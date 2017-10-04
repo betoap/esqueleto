@@ -70,8 +70,7 @@ export abstract class Rota
 
     protected resposta(res: Response, status:any, dados:any)
     {
-        dados.token = res["token"];
-        dados.expire = res["expires"];
+        if( status >= 200 && status < 300 ) dados.token = res["token"];
         return res.status(status).json(dados);
     }
 }

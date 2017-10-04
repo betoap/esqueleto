@@ -20,5 +20,12 @@ export class UsuarioFiltro extends Filtro
             message: "^email invalido"
           }
       };
+      this.restrincoes.senha = {
+        presence: true,
+        length: {
+            minimum: 2,
+            message: "deve ter pelo menos 2 caracteres"
+        }
+    };
     }
 }

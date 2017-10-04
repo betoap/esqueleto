@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize';
-import * as bcrypt from "bcrypt";
+import * as bcrypt from 'bcrypt';
 
 import { Entidade } from '../../nucleo/entidade';
 
@@ -32,11 +32,6 @@ export class UsuarioEntidade extends Entidade
     public senha:any = {
         type: Sequelize.STRING(20),
         allowNull: false,
-        set: (key: string | object, value: any, options: Object) => {
-            console.log(key, value, options);
-            //this.senha.Model.usuarios.setDataValue('senha', 'TESTE!@#');
-            this.geraSenha(key);
-        },
         validate: {
             notEmpty: true
         }
@@ -59,10 +54,31 @@ export class UsuarioEntidade extends Entidade
         }
     }
 
-    public geraSenha( senha: string | object )
+    public getHooks()
     {
-        console.log("GERA: ", senha, this.salt);
-        return bcrypt.hashSync(senha, this.salt);
+        const self = this;
+        return {
+            beforeCreate: function(usuario, options) {
+                usuario.senha = self.geraSenha(usuario);
+            },
+            beforeUpdate: function(usuario, options) {
+                usuario.senha = self.geraSenha(usuario);
+            }
+        }
+    }
+
+    public getClassMethods()
+    {
+        const self = this;
+        return {
+            checaSenha: ( usuario, senha ) => usuario.senha === self.geraSenha( usuario, senha )
+        }
+    }
+
+    public geraSenha( usuario:UsuarioEntidade, senha?:string )
+    {
+        senha = senha || usuario.senha;
+        return bcrypt.hashSync( senha, usuario.salt );
     }
 
 }

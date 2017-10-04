@@ -13,6 +13,8 @@ class Repositorio {
     }
     sequelizeConfig() {
         return {
+            hooks: this.entidade.getHooks(),
+            classMethods: this.entidade.getClassMethods(),
             createdAt: 'criado_em',
             updatedAt: 'editado_em',
         };
@@ -20,25 +22,23 @@ class Repositorio {
     find() {
         return this.conexao.find({});
     }
-    findBy(id) {
-        return this.conexao.findById(id);
+    findBy(objeto) {
+        return this.conexao.findBy(objeto);
     }
-    findOne() {
-        return this.conexao.findAll({
-            limit: 1
-        });
+    findOne(objeto) {
+        return this.conexao.findOne(objeto);
     }
-    getAll() {
-        return this.conexao.findAll({});
+    getAll(objeto) {
+        return this.conexao.findAll(objeto);
     }
-    count() {
-        return this.conexao.count();
+    count(objeto) {
+        return this.conexao.count(objeto);
     }
-    salvar(entidade, updateID = null) {
+    salvar(entidade, objeto) {
         let erros = this.filtro.contemErros(entidade);
         if (!erros) {
-            if (updateID) {
-                return this.conexao.findByIdAndUpdate(updateID, entidade);
+            if (objeto) {
+                return this.conexao.findByAndUpdate(objeto, entidade);
             }
             else {
                 return this.conexao.create(entidade);
@@ -54,11 +54,11 @@ class Repositorio {
     create(entidade) {
         return this.salvar(entidade);
     }
-    update(id, entidade) {
-        return this.salvar(entidade, id);
+    update(entidade, objeto) {
+        return this.salvar(entidade, objeto);
     }
-    delete(id) {
-        return this.conexao.delete(id);
+    delete(objeto) {
+        return this.conexao.delete(objeto);
     }
 }
 exports.Repositorio = Repositorio;

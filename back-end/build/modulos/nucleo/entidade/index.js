@@ -15,5 +15,7 @@ class Entidade {
             defaultValue: Sequelize.NOW
         };
     }
+    getHooks() { return {}; }
+    getClassMethods() { return {}; }
 }
 exports.Entidade = Entidade;

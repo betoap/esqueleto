@@ -1,37 +1,32 @@
 import { Request, Response, ErrorRequestHandler, Router, RouterOptions } from "express";
 import * as jwt from 'jwt-simple';
 import * as moment from 'moment';
+const config:any = require('./../../../config/.config');
 
 export class Autenticacao
 {
-    constructor( private app, private config ){}
+
+    constructor( private app? ){}
 
     private validaToken(): void
     {
-        this.app.use( `/${this.config.jwt.moduloAcesso}/${this.config.jwt.paginaAcesso}`, ( req:Request, res:Response, next:Function ) => {
-            if ( req.method === "POST" ) {
-                let token = this.geraToken( res );
-                res["token"] = token;
-            }
-            next();
-        });
-
         this.app.use( ( req:Request, res:Response, next:Function ) =>
         {
-            if( req.originalUrl === `/${this.config.jwt.moduloAcesso}/${this.config.jwt.paginaAcesso}` ) {
+            if( req.originalUrl === `/${config.jwt.moduloAcesso}/${config.jwt.paginaAcesso}` ) {
                 next();
                 return;
             }
-            let token = req.headers[this.config.jwt.header];
+            let token = req.headers[config.jwt.header];
             if ( token ) {
                 try {
-                    var decoded = jwt.decode(token, this.config.jwt.chave);
+                    let decoded = jwt.decode(token, config.jwt.chave);
                     if ( decoded.exp  && decoded.exp <= Date.now() ) {
                         res.status( 401 ).json({
                             message: "Não autorizado: o token exprirou."
                         });
                         return;
                     }
+                    req['usuarioLogado'] = decoded;
                     next();
                     return;
                 } catch ( err ) {
@@ -47,16 +42,20 @@ export class Autenticacao
         });
     }
 
-    private geraToken( res: Response ): any
+    public static geraToken( res: Response, payload: any ): any
     {
-        let expires = moment().add(this.config.jwt.expira, 'seconds');
-        let config = this.config.jwt.expira ? { exp: expires } : {};
-        let token = jwt.encode(config, this.config.jwt.chave);
+        moment.locale('pt-BR');
+        let resposta: any = {};
+        let expires: any;
+        let expira: boolean = config.jwt.expira != undefined;
+        if ( expira ) {
+            expires = moment().add(config.jwt.expira, 'seconds');
+            resposta.expira = expires;
+            payload.exp = expires;
+        }
+        let token = jwt.encode(payload, config.jwt.chave);
         res["token"] = token;
-        res["expires"] = expires;
-        return {
-            token : token,
-            expires: expires
-        };
+        resposta.token = token;
+        return resposta;
     }
 }

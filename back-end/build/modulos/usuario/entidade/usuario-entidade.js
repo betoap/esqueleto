@@ -29,11 +29,6 @@ class UsuarioEntidade extends entidade_1.Entidade {
         this.senha = {
             type: Sequelize.STRING(20),
             allowNull: false,
-            set: (key, value, options) => {
-                console.log(key, value, options);
-                //this.senha.Model.usuarios.setDataValue('senha', 'TESTE!@#');
-                this.geraSenha(key);
-            },
             validate: {
                 notEmpty: true
             }
@@ -54,9 +49,26 @@ class UsuarioEntidade extends entidade_1.Entidade {
             }
         };
     }
-    geraSenha(senha) {
-        console.log("GERA: ", senha, this.salt);
-        return bcrypt.hashSync(senha, this.salt);
+    getHooks() {
+        const self = this;
+        return {
+            beforeCreate: function (usuario, options) {
+                usuario.senha = self.geraSenha(usuario);
+            },
+            beforeUpdate: function (usuario, options) {
+                usuario.senha = self.geraSenha(usuario);
+            }
+        };
+    }
+    getClassMethods() {
+        const self = this;
+        return {
+            checaSenha: (usuario, senha) => usuario.senha === self.geraSenha(usuario, senha)
+        };
+    }
+    geraSenha(usuario, senha) {
+        senha = senha || usuario.senha;
+        return bcrypt.hashSync(senha, usuario.salt);
     }
 }
 exports.UsuarioEntidade = UsuarioEntidade;
