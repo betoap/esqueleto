@@ -12,7 +12,13 @@ export class Autenticacao
     {
         this.app.use( ( req:Request, res:Response, next:Function ) =>
         {
-            if( req.originalUrl === `/${config.jwt.moduloAcesso}/${config.jwt.paginaAcesso}` ) {
+            if( 
+                (
+                    req.originalUrl === `/${config.jwt.moduloAcesso}/${config.jwt.paginaAcesso}` || 
+                    req.originalUrl === `/${config.jwt.moduloAcesso}`
+                ) &&
+                req.method === "POST"
+            ) {
                 next();
                 return;
             }

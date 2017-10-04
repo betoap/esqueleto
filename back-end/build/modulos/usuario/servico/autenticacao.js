@@ -9,7 +9,9 @@ class Autenticacao {
     }
     validaToken() {
         this.app.use((req, res, next) => {
-            if (req.originalUrl === `/${config.jwt.moduloAcesso}/${config.jwt.paginaAcesso}`) {
+            if ((req.originalUrl === `/${config.jwt.moduloAcesso}/${config.jwt.paginaAcesso}` ||
+                req.originalUrl === `/${config.jwt.moduloAcesso}`) &&
+                req.method === "POST") {
                 next();
                 return;
             }
